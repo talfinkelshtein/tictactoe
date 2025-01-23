@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
-
-    private val board = Array(3) { arrayOfNulls<String>(3) } // Represents the game board
-    private var isPlayerX = true // X starts first
+    private val board = Array(3) { arrayOfNulls<String>(3) }
+    private var isPlayerX = true
     private var gameActive = true
 
     private lateinit var gameStatus: TextView
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         playAgainButton = findViewById(R.id.playAgainButton)
         gameGrid = findViewById(R.id.gameGrid)
 
-        // Initialize grid buttons
         for (i in 0 until gameGrid.childCount) {
             val row = i / 3
             val col = i % 3
@@ -35,20 +33,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Reset the game
         playAgainButton.setOnClickListener {
             resetGame()
         }
     }
 
     private fun makeMove(cell: Button, row: Int, col: Int) {
-        if (!gameActive || board[row][col] != null) return // Ignore invalid moves
+        if (!gameActive || board[row][col] != null) return
 
-        // Update the board and UI
         board[row][col] = if (isPlayerX) "X" else "O"
         cell.text = board[row][col]
 
-        // Check for winner
         when {
             checkWinner() -> {
                 gameStatus.text = "${if (isPlayerX) "X" else "O"} wins!"
@@ -68,13 +63,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkWinner(): Boolean {
-        // Check rows and columns
         for (i in 0..2) {
             if (board[i][0] != null && board[i][0] == board[i][1] && board[i][1] == board[i][2]) return true
             if (board[0][i] != null && board[0][i] == board[1][i] && board[1][i] == board[2][i]) return true
         }
 
-        // Check diagonals
         if (board[0][0] != null && board[0][0] == board[1][1] && board[1][1] == board[2][2]) return true
         if (board[0][2] != null && board[0][2] == board[1][1] && board[1][1] == board[2][0]) return true
 
@@ -91,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetGame() {
-        // Clear the board
         for (i in 0 until gameGrid.childCount) {
             val cell = gameGrid.getChildAt(i) as Button
             cell.text = ""
